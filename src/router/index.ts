@@ -1,14 +1,22 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-
 Vue.use(VueRouter);
+
+const homeChunk = () =>
+  import(
+    /* webpackChunkName: "Home" */ /* webpackPrefetch: true */ "../views/Home.vue"
+  );
+
+const aboutChunk = () =>
+  import(
+    /* webpackChunkName: "About" */ /* webpackPrefetch: true */ "../views/AboutView.vue"
+  );
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: homeChunk,
   },
   {
     path: "/about",
@@ -16,9 +24,16 @@ const routes: Array<RouteConfig> = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    component: aboutChunk,
   },
+  // {
+  //   path: "/login",
+  //   name: "about",
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: aboutChunk,
+  // },
 ];
 
 const router = new VueRouter({
