@@ -78,32 +78,13 @@
     <h3>Ecosystem</h3>
     <ul>
       <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener"
-          >vue-router</a
-        >
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener"
-          >vue-loader</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-          rel="noopener"
-          >awesome-vue</a
+        <Input
+          :placeholder="'Enter your name'"
+          :type="'text'"
+          v-model="message"
+        />
+        <Button :type="'primary'" :loading="false" @click="onClick"
+          >Hello World</Button
         >
       </li>
       <li>
