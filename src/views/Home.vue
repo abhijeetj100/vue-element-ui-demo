@@ -20,11 +20,11 @@ import { Button } from "element-ui";
 // Components
 const HelloWorld = () =>
   import(
-    /* webpackChunkName: "Login" */ /* webpackPrefetch: true */ "../components/HelloWorld.vue"
+    /* webpackChunkName: "HelloWorld" */ /* webpackPrefetch: true */ "../components/HelloWorld.vue"
   );
 const Login = () =>
   import(
-    /* webpackChunkName: "HelloWorld" */ /* webpackPrefetch: true */ "./Login.vue"
+    /* webpackChunkName: "Login" */ /* webpackPrefetch: true */ "./Login.vue"
   );
 
 @Component({
