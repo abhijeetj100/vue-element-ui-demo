@@ -87,16 +87,37 @@
           >Hello World</Button
         >
       </li>
+      <li>
+        <Input
+          :placeholder="'Enter your name'"
+          :type="'text'"
+          v-model="message"
+        />
+        <Button :type="'primary'" :loading="false" @click="onClick"
+          >Hello World</Button
+        >
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { Button, Input } from "element-ui";
 
-@Component
+@Component({
+  components: {
+    Button,
+    Input,
+  },
+})
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
+  message = "";
+
+  onClick() {
+    alert(`Hello, ${this.message}`);
+  }
 }
 </script>
 
