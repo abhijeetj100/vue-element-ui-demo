@@ -8,6 +8,7 @@
     @close="close"
   >
     <Form
+      ref="loginForm"
       :statusIcon="true"
       :label-width="'auto'"
       :model="loginModel"
@@ -53,17 +54,19 @@ import { Dialog, Input, Form, FormItem, Button } from "element-ui";
 export default class Login extends Vue {
   @Prop() open!: boolean;
 
+  loginModel = {
+    username: "",
+    password: "",
+  };
+
   // https://github.com/yiminghe/async-validator
-  // validatePass = (rule, value, callback: Function) => {
-  //       if (value === '') {
-  //         callback(new Error('Please input the password'));
-  //       } else {
-  //         if (this.ruleForm.checkPass !== '') {
-  //           this.$refs.ruleForm.validateField('checkPass');
-  //         }
-  //         callback();
-  //       }
-  //     };
+  validatePass = (rule: object, password: string, callback: Function) => {
+    console.log(rule);
+    if (/\s/.test(password)) {
+      callback(new Error("No spaces please!"));
+    }
+    callback();
+  };
 
   formValidator = {
     username: [
@@ -84,16 +87,18 @@ export default class Login extends Vue {
         message: "Hmm, ever had a username with just spaces?!",
       },
     ],
-    password: {
-      required: true,
-      type: "string",
-      message: "We wont tell anyone, just need to authenticate it's you!",
-    },
-  };
-
-  loginModel = {
-    username: "",
-    password: "",
+    password: [
+      {
+        required: true,
+        type: "string",
+        message: "We wont tell anyone, just need to authenticate it's you!",
+      },
+      {
+        type: "string",
+        message: "No spaces please!",
+        validator: this.validatePass,
+      },
+    ],
   };
 
   formValidity: { [key: string]: boolean } = {
