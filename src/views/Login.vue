@@ -1,24 +1,40 @@
 <template>
-  <Dialog :visible="open" :title="'Login'" @close="close">
+  <Dialog
+    :width="'400px'"
+    :visible="open"
+    :title="'Login'"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    @close="close"
+  >
     <Form
+      ref="loginForm"
       :statusIcon="true"
-      inline
+      :label-width="'auto'"
       :model="loginModel"
       :rules="formValidator"
       size="small"
+      @validate="onValidate"
     >
       <FormItem :label="'Username'" required prop="username">
-        <Input v-model="loginModel.username" />
+        <Input class="form_input" v-model="loginModel.username" />
       </FormItem>
       <FormItem :label="'Password'" required prop="password">
-        <Input :show-password="true" v-model="loginModel.password" />
-      </FormItem>
-      <FormItem>
-        <Button type="primary" :disabled="!canSubmit" @click="submitLogin"
-          >Login</Button
-        >
+        <Input
+          class="form_input"
+          :show-password="true"
+          v-model="loginModel.password"
+        />
       </FormItem>
     </Form>
+    <template #footer>
+      <Button type="primary" :disabled="!canSubmit" @click="submitLogin">
+        Login
+      </Button>
+      <Button type="secondary" :disabled="!canSubmit" @click="submitLogin">
+        Sign Up
+      </Button>
+    </template>
   </Dialog>
 </template>
 
@@ -38,17 +54,19 @@ import { Dialog, Input, Form, FormItem, Button } from "element-ui";
 export default class Login extends Vue {
   @Prop() open!: boolean;
 
+  loginModel = {
+    username: "",
+    password: "",
+  };
+
   // https://github.com/yiminghe/async-validator
-  // validatePass = (rule, value, callback: Function) => {
-  //       if (value === '') {
-  //         callback(new Error('Please input the password'));
-  //       } else {
-  //         if (this.ruleForm.checkPass !== '') {
-  //           this.$refs.ruleForm.validateField('checkPass');
-  //         }
-  //         callback();
-  //       }
-  //     };
+  validatePass = (rule: object, password: string, callback: Function) => {
+    console.log(rule);
+    if (/\s/.test(password)) {
+      callback(new Error("No spaces please!"));
+    }
+    callback();
+  };
 
   formValidator = {
     username: [
@@ -66,32 +84,34 @@ export default class Login extends Vue {
       {
         type: "string",
         whitespace: true,
-        message: "Hmm, ever had a username with spaces?!",
+        message: "Hmm, ever had a username with just spaces?!",
       },
     ],
-    password: {
-      required: true,
-      type: "string",
-      message: "We wont tell anyone, just need to authenticate it's you!",
-    },
+    password: [
+      {
+        required: true,
+        type: "string",
+        message: "We wont tell anyone, just need to authenticate it's you!",
+      },
+      {
+        type: "string",
+        message: "No spaces please!",
+        validator: this.validatePass,
+      },
+    ],
   };
 
-  loginModel = {
-    username: "",
-    password: "",
+  formValidity: { [key: string]: boolean } = {
+    username: false,
+    password: false,
   };
-
-  username = "";
-  password = "";
-
-  openDialog = false;
-
-  mounted() {
-    this.openDialog = this.open;
-  }
 
   get canSubmit(): boolean {
-    return !!this.loginModel.username && !!this.loginModel.password;
+    return (
+      !!this.loginModel.username &&
+      !!this.loginModel.password &&
+      this.isFormValid
+    );
   }
 
   submitLogin() {
@@ -100,9 +120,23 @@ export default class Login extends Vue {
     this.loginModel.password = "";
   }
 
+  get isFormValid(): boolean {
+    return this.formValidity.username && this.formValidity.password;
+  }
+
+  onValidate(result: string, isValid: boolean) {
+    this.formValidity[result] = isValid;
+  }
+
   @Emit()
   close() {
     return false;
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.form_input {
+  width: 100%;
+}
+</style>
