@@ -14,9 +14,9 @@
         <Input :show-password="true" v-model="loginModel.password" />
       </FormItem>
       <FormItem>
-        <Button type="primary" :disabled="!canSubmit" @click="submitLogin"
-          >Login</Button
-        >
+        <Button type="primary" :disabled="!canSubmit" @click="submitLogin">
+          Login
+        </Button>
       </FormItem>
     </Form>
   </Dialog>
@@ -66,7 +66,7 @@ export default class Login extends Vue {
       {
         type: "string",
         whitespace: true,
-        message: "Hmm, ever had a username with spaces?!",
+        message: "Hmm, ever had a username with just spaces?!",
       },
     ],
     password: {
@@ -80,15 +80,6 @@ export default class Login extends Vue {
     username: "",
     password: "",
   };
-
-  username = "";
-  password = "";
-
-  openDialog = false;
-
-  mounted() {
-    this.openDialog = this.open;
-  }
 
   get canSubmit(): boolean {
     return !!this.loginModel.username && !!this.loginModel.password;
