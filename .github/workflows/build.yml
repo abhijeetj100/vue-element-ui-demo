@@ -27,9 +27,7 @@ jobs:
         with:
           # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
           node-version: 16.15.1
-
-#       - name: Setup yarn
-#         run: npm install -g yarn
+          cache: yarn
 
       # Runs a single command using the runners shell
       - name: Install dependencies
