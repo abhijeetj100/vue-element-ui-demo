@@ -1,24 +1,39 @@
 <template>
-  <Dialog :visible="open" :title="'Login'" @close="close">
+  <Dialog
+    :width="'400px'"
+    :visible="open"
+    :title="'Login'"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    @close="close"
+  >
     <Form
       :statusIcon="true"
-      inline
+      :label-width="'auto'"
       :model="loginModel"
       :rules="formValidator"
       size="small"
+      @validate="onValidate"
     >
       <FormItem :label="'Username'" required prop="username">
-        <Input v-model="loginModel.username" />
+        <Input class="form_input" v-model="loginModel.username" />
       </FormItem>
       <FormItem :label="'Password'" required prop="password">
-        <Input :show-password="true" v-model="loginModel.password" />
-      </FormItem>
-      <FormItem>
-        <Button type="primary" :disabled="!canSubmit" @click="submitLogin">
-          Login
-        </Button>
+        <Input
+          class="form_input"
+          :show-password="true"
+          v-model="loginModel.password"
+        />
       </FormItem>
     </Form>
+    <template #footer>
+      <Button type="primary" :disabled="!canSubmit" @click="submitLogin">
+        Login
+      </Button>
+      <Button type="secondary" :disabled="!canSubmit" @click="submitLogin">
+        Sign Up
+      </Button>
+    </template>
   </Dialog>
 </template>
 
@@ -81,8 +96,17 @@ export default class Login extends Vue {
     password: "",
   };
 
+  formValidity: { [key: string]: boolean } = {
+    username: false,
+    password: false,
+  };
+
   get canSubmit(): boolean {
-    return !!this.loginModel.username && !!this.loginModel.password;
+    return (
+      !!this.loginModel.username &&
+      !!this.loginModel.password &&
+      this.isFormValid
+    );
   }
 
   submitLogin() {
@@ -91,9 +115,23 @@ export default class Login extends Vue {
     this.loginModel.password = "";
   }
 
+  get isFormValid(): boolean {
+    return this.formValidity.username && this.formValidity.password;
+  }
+
+  onValidate(result: string, isValid: boolean) {
+    this.formValidity[result] = isValid;
+  }
+
   @Emit()
   close() {
     return false;
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.form_input {
+  width: 100%;
+}
+</style>

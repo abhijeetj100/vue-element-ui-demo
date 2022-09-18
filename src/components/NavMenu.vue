@@ -18,9 +18,10 @@
     </Menu>
     <Button
       style="text-color: white; float: right"
+      plain
       type="primary"
+      icon="el-icon-switch-button"
       @click="openLoginDialog = true"
-      round
       >Login</Button
     >
     <div v-if="openLoginDialog">
